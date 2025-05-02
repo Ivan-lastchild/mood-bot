@@ -5,9 +5,8 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // 👈 для плавного UX
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Перевірка токена при першому завантаженні
   useEffect(() => {
     const token = sessionStorage.getItem('admin-auth');
     if (!token) {
