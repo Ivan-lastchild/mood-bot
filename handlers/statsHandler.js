@@ -1,5 +1,5 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import { Mood } from '../models/Mood.js';
+import { Mood } from '../server/models/Mood.js';
 
 const width = 600;
 const height = 400;

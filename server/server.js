@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { Mood } from '../models/Mood.js';
+import { Mood } from './models/Mood.js';
 
 dotenv.config();
 

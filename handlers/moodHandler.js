@@ -1,5 +1,5 @@
 import { Markup } from 'telegraf';
-import { Mood } from '../models/Mood.js';
+import { Mood } from '../server/models/Mood.js';
 
 
 

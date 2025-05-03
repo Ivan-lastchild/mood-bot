@@ -1,4 +1,4 @@
-import { Mood } from '../models/Mood.js';
+import { Mood } from '../server/models/Mood.js';
 
 export async function handleHistory(ctx) {
   const history = await Mood.find({ id: ctx.from.id })
