@@ -7,6 +7,7 @@ import { handleHistory } from './handlers/historyHandler.js';
 import { handleStats } from './handlers/statsHandler.js';
 import { connectDB } from './db.js';
 
+
 dotenv.config();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 registerMoodListeners(bot);
