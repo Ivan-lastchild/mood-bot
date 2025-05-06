@@ -1,5 +1,5 @@
 import { Mood } from '../server/models/Mood.js';
-import { formatDateToLocal } from '../client/src/utils/formatDate.js';
+import { formatDateToLocal } from '../utils/formatDate.js';
 
 export async function handleHistory(ctx) {
   const history = await Mood.find({ id: ctx.from.id })
