@@ -3,11 +3,13 @@ import { Pie } from 'react-chartjs-2';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Loader.css';
 import {formatDateToLocal} from '../utils/formatDate';
+import { useAuth } from '../context/AuthContext';
 
 function MainPage({ moods, darkMode, setDarkMode, handleDelete, isLoading }) {
   const [filterMood, setFilterMood] = useState('');
   const [searchUsername, setSearchUsername] = useState('');
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const getStats = () => {
     const counts = {
@@ -68,6 +70,26 @@ function MainPage({ moods, darkMode, setDarkMode, handleDelete, isLoading }) {
         >
           {darkMode ? '🌞' : '🌙'}
         </button>
+        <button
+    onClick={() => {
+      logout();
+      navigate('/login');
+    }}
+    style={{
+      position: 'absolute',
+      top: 0,
+      right: '60px',
+      fontSize: '16px',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: 'var(--text-color)',
+      padding: '6px'
+    }}
+    title="Вийти"
+  >
+    🔓 Вийти
+  </button>
       </div>
 
       {isLoading ? (

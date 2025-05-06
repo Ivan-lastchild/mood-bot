@@ -21,8 +21,9 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         setIsLoading(false);
       })
-      .catch(() => {
-        localStorage.clear();
+      .catch((err) => {
+        console.warn('❌ Auth check failed:', err.response?.data || err.message);
+        localStorage.removeItem('admin-auth'); 
         setIsAuthenticated(false);
         setIsLoading(false);
       });
@@ -46,8 +47,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.clear();
-    setIsAuthenticated(false);
+    localStorage.removeItem('admin-auth');
   };
 
   return (
