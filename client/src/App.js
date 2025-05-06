@@ -43,7 +43,7 @@ function AppRoutes() {
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    const token = sessionStorage.getItem('admin-auth');
+    const token = localStorage.getItem('admin-auth');
     if (!token) return;
 
     setIsLoading(true);
@@ -66,7 +66,7 @@ function AppRoutes() {
     const confirmed = window.confirm('Видалити цей запис?');
     if (!confirmed) return;
 
-    const token = sessionStorage.getItem('admin-auth');
+    const token = localStorage.getItem('admin-auth');
     if (!token) return;
 
     try {

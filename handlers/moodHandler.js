@@ -42,7 +42,7 @@ export function registerMoodListeners(bot) {
 
       await Mood.create({
         id: ctx.from.id,
-        username: ctx.from.username,
+        username: ctx.from.username || `id_${ctx.from.id}`,
         mood,
         timestamp: new Date().toISOString()
       });

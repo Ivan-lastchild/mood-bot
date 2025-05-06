@@ -3,11 +3,18 @@ import { Mood } from '../server/models/Mood.js';
 
 const width = 600;
 const height = 400;
-const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+const chartJSNodeCanvas = new ChartJSNodeCanvas({
+  width,
+  height,
+  backgroundColour: 'white',
+  chartCallback: (ChartJS) => {
+    ChartJS.defaults.font.family = '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif';
+    ChartJS.defaults.color = '#222';
+  }
+});
 
 export async function handleStats(ctx) {
   const userId = ctx.from.id;
-
   const moods = await Mood.find({ id: userId });
 
   if (moods.length === 0) {
@@ -41,21 +48,32 @@ export async function handleStats(ctx) {
           label: 'Кількість',
           data: Object.values(counts),
           backgroundColor: [
-            '#4caf50',
-            '#ffeb3b',
-            '#f44336',
-            '#9c27b0',
-            '#ff5722'
+            '#66bb6a',
+            '#ffd54f',
+            '#ef5350',
+            '#ba68c8',
+            '#ff7043'
           ],
-          borderRadius: 8
+          borderRadius: 10,
+          barPercentage: 0.6
         }
       ]
     },
     options: {
+      responsive: false,
       plugins: {
         legend: {
-          labels: {
-            color: '#000'
+          display: false
+        },
+        title: {
+          display: true,
+          text: '📊 Графік настроїв',
+          font: {
+            size: 20
+          },
+          padding: {
+            top: 10,
+            bottom: 20
           }
         }
       },
@@ -63,22 +81,26 @@ export async function handleStats(ctx) {
         y: {
           beginAtZero: true,
           ticks: {
-            stepSize: 1,
             precision: 0,
-            color: '#000'
+            stepSize: 1,
+            font: {
+              size: 14
+            }
           },
           grid: {
-            color: '#ccc'
+            color: '#eee'
           }
         },
         x: {
           ticks: {
-            color: '#000',
+            font: {
+              size: 14
+            },
             maxRotation: 0,
             minRotation: 0
           },
           grid: {
-            color: '#ccc'
+            color: '#eee'
           }
         }
       }
@@ -87,8 +109,6 @@ export async function handleStats(ctx) {
 
   const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
 
-  await ctx.reply(`📊 Ваша особиста статистика:
-
-${textStats}`);
+  await ctx.reply(`📊 Ваша особиста статистика:\n\n${textStats}`);
   await ctx.replyWithPhoto({ source: imageBuffer }, { caption: '📈 Графік настроїв' });
 }

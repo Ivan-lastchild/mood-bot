@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('admin-auth');
+    const token = localStorage.getItem('admin-auth');
     if (!token) {
       setIsLoading(false);
       return;
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
       })
       .catch(() => {
-        sessionStorage.clear();
+        localStorage.clear();
         setIsAuthenticated(false);
         setIsLoading(false);
       });
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.post('http://localhost:3939/api/login', { login, password });
 
       if (res.data.success && res.data.token) {
-        sessionStorage.setItem('admin-auth', res.data.token);
+        localStorage.setItem('admin-auth', res.data.token);
         setIsAuthenticated(true);
         return true;
       }
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     setIsAuthenticated(false);
   };
 

@@ -1,12 +1,19 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import fs from 'fs-extra';
 
 const width = 600;
 const height = 400;
-const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
 
-export async function generateMoodChart(stats, userId) {
-  const moods = ['😊 Добре', '😐 Нормально', '😞 Погано'];
+const chartJSNodeCanvas = new ChartJSNodeCanvas({
+  width,
+  height,
+  chartCallback: (ChartJS) => {
+    ChartJS.defaults.font.family = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+    ChartJS.defaults.color = '#333';
+  }
+});
+
+export async function generateMoodChart(stats) {
+  const moods = ['😊 Добре', '😐 Нормально', '😞 Погано', '🥱 Втомлено', '😡 Злий'];
   const counts = moods.map(mood => stats[mood] || 0);
 
   const configuration = {
@@ -14,27 +21,37 @@ export async function generateMoodChart(stats, userId) {
     data: {
       labels: moods,
       datasets: [{
-        label: 'Настрої',
+        label: 'Кількість',
         data: counts,
-        backgroundColor: ['#4caf50', '#ffc107', '#f44336']
+        backgroundColor: ['#66bb6a', '#ffd54f', '#ef5350', '#ba68c8', '#ff7043'],
+        borderRadius: 6,
+        barPercentage: 0.6,
       }]
     },
     options: {
+      responsive: false,
       plugins: {
-        legend: { display: false }
+        legend: { display: false },
+        title: {
+          display: true,
+          text: '📊 Графік настроїв',
+          font: { size: 20 },
+          padding: { top: 10, bottom: 20 }
+        }
       },
       scales: {
+        x: {
+          ticks: { font: { size: 14 } }
+        },
         y: {
           beginAtZero: true,
-          ticks: { precision: 0 }
+          ticks: { precision: 0, stepSize: 1, font: { size: 14 } },
+          grid: { color: '#e0e0e0' }
         }
       }
     }
   };
 
-  const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
-  const filePath = `./data/stats-${userId}.png`;
-  await fs.ensureDir('./data');
-  await fs.writeFile(filePath, imageBuffer);
-  return filePath;
+  // 👇 Повертає лише Buffer
+  return await chartJSNodeCanvas.renderToBuffer(configuration);
 }

@@ -1,4 +1,5 @@
 import { Mood } from '../server/models/Mood.js';
+import { formatDateToLocal } from '../client/src/utils/formatDate.js';
 
 export async function handleHistory(ctx) {
   const history = await Mood.find({ id: ctx.from.id })
@@ -11,7 +12,7 @@ export async function handleHistory(ctx) {
 
   const text = history.map((item, i) => {
     const date = item.timestamp
-      ? new Date(item.timestamp).toLocaleString('uk-UA')
+      ? formatDateToLocal(item.timestamp || item.date)
       : item.date || '❓';
     return `${i + 1}. ${date} — ${item.mood}`;
   }).join('\n');

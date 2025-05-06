@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Loader.css';
+import {formatDateToLocal} from '../utils/formatDate';
 
 function MainPage({ moods, darkMode, setDarkMode, handleDelete, isLoading }) {
   const [filterMood, setFilterMood] = useState('');
@@ -140,7 +141,7 @@ function MainPage({ moods, darkMode, setDarkMode, handleDelete, isLoading }) {
                     </td>
                     <td>{mood.mood}</td>
                     <td>{mood.timestamp
-                      ? new Date(mood.timestamp).toLocaleString('uk-UA')
+                      ? formatDateToLocal(mood.timestamp || mood.date)
                       : new Date(mood.date).toLocaleDateString('uk-UA')}</td>
                     <td>
                       <button
