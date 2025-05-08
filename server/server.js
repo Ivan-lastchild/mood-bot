@@ -12,9 +12,13 @@ const PORT = process.env.PORT || 3939;
 app.use(cors());
 app.use(express.json());
 
-// ✅ Логін: перевіряє login+password, повертає токен
 app.post('/api/login', (req, res) => {
   const { login, password } = req.body;
+
+  console.log('📥 Отримано login:', login);
+  console.log('📥 Отримано password:', password);
+  console.log('🛡️ Очікується login:', process.env.ADMIN_LOGIN);
+  console.log('🛡️ Очікується password:', process.env.ADMIN_PASSWORD);
 
   if (login === process.env.ADMIN_LOGIN && password === process.env.ADMIN_PASSWORD) {
     return res.json({ success: true, token: process.env.ADMIN_TOKEN });
