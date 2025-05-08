@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -14,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    axios.get('http://localhost:3939/api/moods', {
+    axios.get(`${API_URL}/api/moods`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => {
@@ -31,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (login, password) => {
     try {
-      const res = await axios.post('http://localhost:3939/api/login', { login, password });
+      const res = await axios.post(`${API_URL}/api/login`, { login, password });
 
       if (res.data.success && res.data.token) {
         localStorage.setItem('admin-auth', res.data.token);
