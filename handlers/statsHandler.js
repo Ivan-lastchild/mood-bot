@@ -1,5 +1,9 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { Mood } from '../server/models/Mood.js';
+import { registerFont } from 'canvas';
+import path from 'path';
+
+registerFont(path.resolve('./fonts/NotoSans-Regular.ttf'), { family: 'NotoSans' });
 
 const width = 600;
 const height = 400;
@@ -8,7 +12,7 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   height,
   backgroundColour: 'white',
   chartCallback: (ChartJS) => {
-    ChartJS.defaults.font.family = '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif';
+    ChartJS.defaults.font.family = 'NotoSans';
     ChartJS.defaults.color = '#222';
   }
 });
@@ -22,16 +26,25 @@ export async function handleStats(ctx) {
   }
 
   const counts = {
-    '😊 Добре': 0,
-    '😐 Нормально': 0,
-    '😞 Погано': 0,
-    '😫 Втомлено': 0,
-    '😡 Злий': 0
+    'Добре': 0,
+    'Нормально': 0,
+    'Погано': 0,
+    'Втомлено': 0,
+    'Злий': 0
   };
 
   moods.forEach(m => {
-    if (counts[m.mood] !== undefined) {
-      counts[m.mood]++;
+    const moodLabelMap = {
+      '😊 Добре': 'Добре',
+      '😐 Нормально': 'Нормально',
+      '😞 Погано': 'Погано',
+      '😫 Втомлено': 'Втомлено',
+      '😡 Злий': 'Злий'
+    };
+
+    const normalizedMood = moodLabelMap[m.mood];
+    if (normalizedMood) {
+      counts[normalizedMood]++;
     }
   });
 
@@ -42,7 +55,7 @@ export async function handleStats(ctx) {
   const configuration = {
     type: 'bar',
     data: {
-      labels: Object.keys(counts),
+      labels: ['Добре', 'Нормально', 'Погано', 'Втомлено', 'Злий'],
       datasets: [
         {
           label: 'Кількість',
@@ -67,7 +80,7 @@ export async function handleStats(ctx) {
         },
         title: {
           display: true,
-          text: '📊 Графік настроїв',
+          text: 'Графік настроїв',
           font: {
             size: 20
           },
